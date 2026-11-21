@@ -1,7 +1,7 @@
 // Course 3 expansion: every remaining note + bonus stages on prompting Claude, Claude Code and the API.
 VAQ.extend('c3s1', {
   learn: [
-    'Plans: Free (limited daily messages, Sonnet/Haiku, up to 5 Projects), Pro (~$20/mo, all models incl. Opus, unlimited Projects, extended thinking), Max ($100-$200, 5x-20x Pro), Team/Enterprise (per-user billing, admin controls, SSO).',
+    'Plans: Free (limited usage, extended thinking, up to 5 Projects), Pro (~$20/mo or $17/mo yearly: Opus, unlimited Projects, Claude Code, Research), Max ($100-$200, 5x-20x Pro), Team/Enterprise (per-user billing, admin controls, SSO). Prices change - check claude.com/pricing.',
     'Models: Opus = most capable, slower and pricier. Sonnet = balanced default. Haiku = fastest and cheapest.',
     'Switch models with the selector at the top of the chat.',
     'Left sidebar: chat history, Projects, Artifacts library. Right panel: Artifacts previews.',

@@ -3,7 +3,7 @@
 // the connection returns. A newer build shows a banner with an Update button.
 // Bump both numbers with: python tools/bump_version.py "what changed"
 (function () {
-  const BUILD = 9;
+  const BUILD = 10;
   const APP_LINK = 'https://mramos-14.github.io/va-quest/play/';
   const EVERY = 5 * 60 * 1000;
   const ss = {

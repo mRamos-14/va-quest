@@ -8,7 +8,7 @@ VAQ.district({
       { t: 'match', q: 'Match each Claude model to its best use.', p: [['Opus', 'Complex reasoning, deep analysis, hard coding'], ['Sonnet', 'Balanced everyday default'], ['Haiku', 'Fastest and cheapest, high volume']], x: 'Pick by job: Opus for the hardest work, Haiku for simple bulk tasks.' },
       { t: 'mc', q: 'Client needs 10,000 short product descriptions summarised cheaply. Which model?', a: 'Haiku', w: ['Opus', 'The biggest model available', 'None - do it by hand'], x: 'Haiku = fastest and cheapest for simple, high-volume work.' },
       { t: 'mc', q: 'Do you need a credit card for the Claude.ai free tier?', a: 'No', w: ['Yes', 'Only on weekends', 'Only for Haiku'], x: 'Sign up with email or Google/Apple; no card for free.' },
-      { t: 'sort', q: 'Free or Pro?', b: ['Free', 'Pro and up'], i: [['Limited daily messages', 0], ['Up to 5 Projects', 0], ['Access to Opus', 1], ['Extended thinking', 1], ['Unlimited Projects', 1]], x: 'Pro is about $20/month (or $17/month billed yearly).' },
+      { t: 'sort', q: 'Free or Pro?', b: ['Free', 'Pro and up'], i: [['Limited daily messages', 0], ['Up to 5 Projects', 0], ['Access to Opus', 1], ['Claude Code', 1], ['Unlimited Projects', 1]], x: 'Pro is about $20/month (or $17/month billed yearly). Extended thinking is available on Free too.' },
       { t: 'mc', q: 'Where do you set "Always respond in a professional tone with bullet points" for ALL chats?', a: 'Custom Instructions in Settings', w: ['In every single prompt', 'In the Artifacts panel', 'You cannot'], x: 'Custom Instructions apply across chats unless overridden.' },
       { t: 'tf', q: 'You can edit or clear what Claude remembers about you.', a: true, x: 'Memory can be pinned, edited or cleared for privacy.' }
     ] },

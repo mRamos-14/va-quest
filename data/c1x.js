@@ -168,7 +168,7 @@ VAQ.addStage('c1', 'c1s3', { id: 'c1s11', name: 'Zapier Actions, Delays & Paths'
 
 VAQ.addStage('c1', 'c1s11', { id: 'c1s12', name: 'Zapier Formatter & Loops', enemy: 'robot', lessons: ['Formatter by Zapier', 'Looping by Zapier'],
   learn: [
-    'Formatter = Zapier\'s data-cleaning tool: Text, Numbers, Date/Time, Utilities. One transform per step; each step uses a task.',
+    'Formatter = Zapier\'s data-cleaning tool: Text, Numbers, Date/Time, Utilities. One transform per step. Formatter steps don\'t use tasks (like Filter, Paths, Delay and Looping).',
     'Text: capitalize, trim, find/replace, truncate, Extract Email/URL/Number, Split Text.',
     'Numbers: Format Number, Format Currency, Perform Math, Spreadsheet-Style Formula (ROUND, IF, CONCAT). Do math BEFORE formatting.',
     'Dates: Format, Add/Subtract Time (+2 days), Compare Dates. Set timezones explicitly.',
@@ -182,7 +182,7 @@ VAQ.addStage('c1', 'c1s11', { id: 'c1s12', name: 'Zapier Formatter & Loops', ene
     { t: 'mc', q: 'Price arrives as "$1,299.00" text. Before math you should...', a: 'Format Number to strip symbols and commas', w: ['Format Currency', 'Do the math directly', 'Use a Digest'], x: 'Numbers often arrive as text.' },
     { t: 'mc', q: 'One app outputs 03/18/2026, the next needs 2026-03-18. Use...', a: 'Date/Time > Format', w: ['Numbers > Math', 'Paths', 'Webhooks'], x: 'Specify the from-format only when Zapier guesses wrong.' },
     { t: 'mc', q: 'Compute a due date 2 days after signup:', a: 'Date/Time > Add/Subtract Time with "+2 days"', w: ['Delay For', 'Lookup Table', 'Text > Truncate'], x: 'Compare Dates gives days-until-deadline and similar.' },
-    { t: 'tf', q: 'Formatter steps are free and don\'t use tasks.', a: false, x: 'They consume tasks like any action.' },
+    { t: 'tf', q: 'Formatter steps are free and don\'t use tasks.', a: true, x: 'Formatter is one of Zapier\'s built-in tools that don\'t count toward tasks (so are Filter, Paths, Delay and Looping). The app actions around them still do.' },
     { t: 'mc', q: 'An order with 3 products arrives as ONE trigger event. The products are...', a: 'Line items (Zapier\'s arrays)', w: ['Three separate Zaps', 'Bundles', 'Paths'], x: 'Many actions accept line items natively, e.g. invoice line items.' },
     { t: 'match', q: 'Match the line-item tool.', p: [['Line Items to Text', 'Flatten a list into one string'], ['Text to Line Items', 'Turn a string into a list'], ['Pick From List', 'First, last or random item'], ['Import CSV', 'Parse a CSV into line items']], x: 'Line items + Looping = act on each item.' },
     { t: 'ord', q: 'Round-robin lead assignment pattern:', s: ['Lookup table of rep names', 'Pick From List (random)', 'Assign the lead'], x: 'Utilities solving real edge cases.' },
@@ -219,8 +219,8 @@ VAQ.extend('c1s4', {
 // ---------- Make.com ----------
 VAQ.extend('c1s5', {
   learn: [
-    'Make (formerly Integromat): visual canvas. Scenario = one automation; data flows as bundles; each module run = 1 operation.',
-    'Free: 1,000 ops/month, unlimited scenarios. Paid: Core, Pro, Teams, Enterprise.',
+    'Make (formerly Integromat): visual canvas. Scenario = one automation; data flows as bundles; each module run = 1 credit (called "operations" until 2025).',
+    'Free: 1,000 credits/month, up to 2 active scenarios, runs at most every 15 minutes. Paid: Core (unlimited active scenarios), Pro, Teams, Enterprise.',
     'Runs on a schedule or real-time via webhooks. 1 trigger (leftmost), actions flow left to right.',
     'Action types: Create, Update, Send, Upload. Actions return data (e.g. the new contact ID). Always log IDs you\'ll need for updates.',
     'Get = by exact ID (0 or 1 result). Search = by a field (0, 1 or many bundles).',
@@ -236,8 +236,8 @@ VAQ.extend('c1s5', {
     { t: 'sort', q: 'Google Sheets "Add a Row" field rules: correct or wrong?', b: ['Correct', 'Will cause problems'], i: [['Dates formatted correctly', 0], ['Numbers without currency symbols', 0], ['Checkboxes as true/false', 0], ['"$1,200" in a number column', 1]], x: 'Field types matter.' },
     { t: 'tf', q: 'Search returning many results passes them as separate bundles - which can cause duplicate actions.', a: true, x: 'Plan for 0, 1 and many.' },
     { t: 'mc', q: 'Route leads: Facebook > CRM, LinkedIn > email, Website > both. Use...', a: 'A Router with a filter per branch', w: ['One filter', 'An aggregator', 'Three accounts'], x: 'Routers for 3+ paths, simple filters for yes/no.' },
-    { t: 'mc', q: 'Make free plan includes...', a: '1,000 operations/month and unlimited scenarios', w: ['100 tasks/month', 'Unlimited operations', 'Only 2 scenarios'], x: 'Ops are consumed per module run.' },
-    { t: 'mc', q: 'Make supports roughly how many apps (per the lesson)?', a: '1,500+', w: ['15', '150', '1 million'], x: 'Google Workspace, Slack, HubSpot, Airtable, OpenAI and more.' }
+    { t: 'mc', q: 'Make free plan includes...', a: '1,000 credits/month and up to 2 active scenarios', w: ['100 tasks/month', 'Unlimited credits', 'Unlimited active scenarios'], x: 'Credits are used per module run. Core and up remove the 2-scenario limit.' },
+    { t: 'mc', q: 'Make supports roughly how many apps (per the lesson)?', a: '1,500+', w: ['15', '150', '1 million'], x: 'That is the lesson\'s number. Make keeps adding apps (Google Workspace, Slack, HubSpot, Airtable, OpenAI...), so its site lists even more today.' }
   ]
 });
 
@@ -245,18 +245,18 @@ VAQ.addStage('c1', 'c1s5', { id: 'c1s13', name: 'Make: Errors & HTTP', enemy: 'b
   learn: [
     'Error types: connection (expired token, bad key, app down), data (wrong type, missing field), processing (formula/regex fails), rate limit, timeout.',
     'Debug: Scenario History > failed run > failed module > read the message.',
-    'Handlers (right-click > Add error handler): Break, Ignore, Resume (fallback value), Retry (up to 5x), Rollback. You can chain them.',
+    'Five handlers (right-click > Add error handler): Break (stop and save as incomplete, can auto-retry), Commit, Ignore, Resume (fallback value), Rollback. There is no separate Retry handler.',
     'Incomplete executions keep the data so you can retry later. Turn on error notifications (email/Slack).',
     'HTTP module: method, URL, headers, query params, body. Use a reusable connection for keys; Make handles Basic Auth encoding and OAuth2 refresh.',
     'Make AI Agents reason, plan, use your scenarios as tools, show a reasoning panel, and accept text, docs, images and audio.'
   ],
   qs: [
-    { t: 'match', q: 'Match the Make error type to its cause.', p: [['Connection error', 'Expired token, invalid key, app down'], ['Data error', 'Wrong type or missing required field'], ['Processing error', 'Formula or regex fails'], ['Timeout error', 'Request took too long']], x: 'Rate limit errors are retried automatically.' },
+    { t: 'match', q: 'Match the Make error type to its cause.', p: [['Connection error', 'Expired token, invalid key, app down'], ['Data error', 'Wrong type or missing required field'], ['Processing error', 'Formula or regex fails'], ['Timeout error', 'Request took too long']], x: 'With incomplete executions turned on, Make retries rate-limit, connection and timeout errors automatically.' },
     { t: 'ord', q: 'Debug a failed Make run:', s: ['Open Scenario History', 'Click the failed run', 'Click the failed module', 'Read the error message'], x: 'Make shows exactly what went wrong and on which bundle.' },
     { t: 'mc', q: 'An API sometimes fails and "N/A" is fine as the value. Use...', a: 'Resume with a fallback value', w: ['Rollback', 'Break', 'Delete the module'], x: 'The scenario continues instead of stopping.' },
-    { t: 'mc', q: 'Duplicate detection errors are expected and harmless. Use...', a: 'Ignore', w: ['Retry 5 times', 'Rollback', 'Break'], x: 'Skip that bundle silently and continue.' },
+    { t: 'mc', q: 'Duplicate detection errors are expected and harmless. Use...', a: 'Ignore', w: ['Commit', 'Rollback', 'Break'], x: 'Skip that bundle silently and continue.' },
     { t: 'mc', q: 'Partial success would be worse than nothing (e.g. half a payment flow). Use...', a: 'Rollback', w: ['Ignore', 'Resume', 'Nothing'], x: 'Undo everything done in this run - transactional scenarios.' },
-    { t: 'tf', q: 'You can chain handlers: retry 3 times, then resume with a fallback.', a: true, x: 'Directives can be combined.' },
+    { t: 'tf', q: 'Commit and Rollback only work with modules that support transactions (like databases).', a: true, x: 'For most apps, Break, Ignore and Resume are the handlers you will use.' },
     { t: 'mc', q: 'Where do you find runs that stopped mid-way with their data saved?', a: 'History, filtered by "Incomplete"', w: ['Trash', 'The Router', 'Settings > Billing'], x: 'Retry or resolve them later.' },
     { t: 'mc', q: 'Most important alert for production automations:', a: 'Email or Slack notification when any scenario fails', w: ['A daily joke', 'Token count emails', 'None needed'], x: 'Scenario Settings > Error notifications.' },
     { t: 'match', q: 'Match the auth method.', p: [['API key in header', 'Authorization: Bearer KEY or X-API-Key'], ['Basic Auth', 'Username + password, Make encodes it'], ['OAuth2', 'User consent, Make refreshes tokens']], x: 'Create a reusable connection for authenticated APIs.' },
@@ -274,7 +274,7 @@ VAQ.extend('c1s6', {
     'UI: Workflows, Credentials (add before building), Executions (node-level input/output), Templates, Settings.',
     'One trigger node (leftmost). Nodes connect left to right. IF has True/False outputs; Switch has many + a Fallback.',
     'Triggers: Manual, Schedule (simple or cron), Webhook (Test URL vs Production URL).',
-    'Merge (Append, Merge By Field, Multiplex), Wait (time, date, or webhook resume), Loop Over Items (batches), HTTP Request (any API).'
+    'Merge (Append, Combine by matching fields, Combine all possible combinations), Wait (time, date, or webhook resume), Loop Over Items (batches), HTTP Request (any API).'
   ],
   qs: [
     { t: 'mc', q: 'n8n\'s licence model is called...', a: 'Fair-code (Sustainable Use License)', w: ['Fully closed source', 'Public domain', 'Pay per task'], x: 'Free to self-host internally; commercial revenue use needs a paid licence.' },
@@ -282,8 +282,8 @@ VAQ.extend('c1s6', {
     { t: 'mc', q: 'Pan around the n8n canvas with...', a: 'Space + drag', w: ['Ctrl + Z', 'Right-click only', 'You can\'t'], x: 'Zoom with scroll; add nodes with + or double-click empty canvas.' },
     { t: 'match', q: 'Match the cron expression (minute hour ...).', p: [['0 9 * * 1-5', '9am Monday to Friday'], ['0 * * * *', 'Every hour'], ['*/15 * * * *', 'Every 15 minutes']], x: 'Schedule Trigger accepts simple settings or a cron expression.' },
     { t: 'mc', q: 'What happens if a Switch value matches no rule and Fallback isn\'t set?', a: 'The item drops silently', w: ['n8n crashes', 'It goes to every branch', 'It loops forever'], x: 'Always configure Fallback.' },
-    { t: 'mc', q: 'Merge user profiles with orders by user_id:', a: 'Merge By Field', w: ['Append', 'Multiplex', 'Wait'], x: 'Like a database JOIN.' },
-    { t: 'mc', q: 'Generate every T-shirt colour x size combo:', a: 'Multiplex', w: ['Append', 'Merge By Field', 'IF'], x: 'Every combination of both inputs.' },
+    { t: 'mc', q: 'Merge user profiles with orders by user_id:', a: 'Combine by matching fields', w: ['Append', 'All possible combinations', 'Wait'], x: 'Like a database JOIN (older versions called it Merge By Field).' },
+    { t: 'mc', q: 'Generate every T-shirt colour x size combo:', a: 'Combine all possible combinations', w: ['Append', 'Combine by matching fields', 'IF'], x: 'Every combination of both inputs (older versions called it Multiplex).' },
     { t: 'sort', q: 'Good use of the Wait node?', b: ['Yes', 'No'], i: [['Delay between API calls', 0], ['Approval flow (resume by webhook)', 0], ['Time-delayed follow-up', 0], ['Storing passwords', 1]], x: 'Wait: a duration, a time, or a webhook call.' },
     { t: 'sort', q: 'HTTP Request body formats vs auth types:', b: ['Body format', 'Auth type'], i: [['JSON', 0], ['Form data', 0], ['Binary', 0], ['Bearer Token', 1], ['OAuth2', 1], ['Basic Auth', 1]], x: 'Choose the body format the API expects.' },
     { t: 'mc', q: 'Read the API\'s X-RateLimit-Remaining header in n8n:', a: 'Enable "Include Response Headers"', w: ['Use a Merge node', 'Read the Executions tab', 'Not possible'], x: 'Also useful for pagination tokens.' },
@@ -294,17 +294,17 @@ VAQ.extend('c1s6', {
 
 VAQ.addStage('c1', 'c1s6', { id: 'c1s14', name: 'n8n: Agents, MCP & Hosting', enemy: 'robot', lessons: ['AI Agents and Human in the Loop', 'MCP Server / Client', 'RAG Agents', 'Set up your n8n Server'],
   learn: [
-    'Tools Agent: an LLM that calls tools (nodes, APIs, sub-workflows). Conversational Agent: multi-turn chat with context.',
-    'AI node types: LLMs, Memory (window buffer, Redis), Tools, Vector Stores, Embeddings.',
+    'AI Agent node: an LLM that calls tools (nodes, APIs, sub-workflows). Current n8n versions always work as a Tools Agent; the old Conversational Agent type was removed. Add a Memory node for multi-turn chat.',
+    'AI node types: LLMs, Memory (Simple Memory - formerly Window Buffer - or Redis, Postgres), Tools, Vector Stores, Embeddings.',
     'Credentials: OpenAI key from platform.openai.com, Anthropic key from console.anthropic.com. Test with a Basic LLM Chain.',
     'Settings: temperature 0 for extraction, 0.7-1.0 creative. Max tokens ~500 summaries, ~2,000 analysis, 4,000+ long content.',
     'System prompt: role + constraints ("Always be concise. Never share internal data.").',
     'Self-hosting on Render: n8n Docker image, port 5678, Postgres DB settings, WEBHOOK_URL, and an N8N_ENCRYPTION_KEY. 502 errors: raise NODE_OPTIONS memory.'
   ],
   qs: [
-    { t: 'match', q: 'Match the n8n agent type.', p: [['Tools Agent', 'Decides which predefined tools to call'], ['Conversational Agent', 'Keeps context across chat messages']], x: 'Both built on LangChain.' },
+    { t: 'match', q: 'Match the n8n AI piece.', p: [['AI Agent node', 'Decides which connected tools to call'], ['Memory node', 'Keeps context across chat messages']], x: 'The AI Agent node works as a Tools Agent (the old Conversational Agent type was removed). Built on LangChain.' },
     { t: 'sort', q: 'Agent or regular workflow?', b: ['AI Agent', 'Regular workflow'], i: [['Needs reasoning and tool choice', 0], ['Every step known upfront', 1], ['Guaranteed execution order needed', 1], ['Multi-step "it depends" decisions', 0]], x: 'Same rule as the AI Workflows lesson.' },
-    { t: 'match', q: 'Match the AI node category.', p: [['Memory node', 'Window buffer, Redis'], ['Vector Store node', 'Searchable document chunks'], ['Embedding node', 'Turns text into vectors'], ['Tool node', 'HTTP, code, custom actions']], x: 'Plus LLM nodes (OpenAI, Anthropic, Google).' },
+    { t: 'match', q: 'Match the AI node category.', p: [['Memory node', 'Simple Memory (window buffer), Redis'], ['Vector Store node', 'Searchable document chunks'], ['Embedding node', 'Turns text into vectors'], ['Tool node', 'HTTP, code, custom actions']], x: 'Plus LLM nodes (OpenAI, Anthropic, Google).' },
     { t: 'mc', q: 'Where do you get an Anthropic API key for n8n?', a: 'console.anthropic.com', w: ['claude.ai chat settings', 'zapier.com', 'n8n.io/templates'], x: 'Credentials > New > Anthropic > paste key.' },
     { t: 'mc', q: 'Fastest way to confirm a new LLM credential works:', a: 'A Basic LLM Chain node with a simple prompt', w: ['Build a 30-node agent first', 'Email support', 'Restart the server'], x: 'Verify you get a response.' },
     { t: 'match', q: 'Match max tokens to the job (lesson guidance).', p: [['~500', 'Summaries'], ['~2,000', 'Detailed analysis'], ['4,000+', 'Long content generation']], x: 'Set max tokens based on expected output length.' },
@@ -374,7 +374,7 @@ VAQ.addStage('c1', 'c1s8', { id: 'c1s15', name: 'APIs, JSON & Webhooks Lab', ene
   qs: [
     { t: 'match', q: 'Match the HTTP method.', p: [['GET', 'Read data'], ['POST', 'Create something new'], ['PATCH', 'Update part of a record'], ['DELETE', 'Remove a record']], x: 'PUT usually replaces the whole record.' },
     { t: 'match', q: 'Match the status code.', p: [['200', 'OK - it worked'], ['401', 'Not authenticated (bad/missing key)'], ['404', 'Not found'], ['429', 'Too many requests - slow down']], x: '201 = created, 403 = not allowed, 500 = their server broke.' },
-    { t: 'mc', q: 'You get a 429 error. Best fix?', a: 'Add delays, batch requests, or retry with backoff', w: ['Change your password', 'Send requests faster', 'Delete the workflow'], x: '429 = rate limit. Use Retry in Make, Wait/Loop in n8n, Delay After Queue in Zapier.' },
+    { t: 'mc', q: 'You get a 429 error. Best fix?', a: 'Add delays, batch requests, or retry with backoff', w: ['Change your password', 'Send requests faster', 'Delete the workflow'], x: '429 = rate limit. Break with auto-retry in Make, Wait/Loop in n8n, Delay After Queue in Zapier.' },
     { t: 'mc', q: 'A 5xx error usually means...', a: 'The other app\'s server had a problem', w: ['Your JSON is wrong', 'Your key is wrong', 'Success'], x: '4xx = check your request. 5xx = retry later.' },
     { t: 'mc', q: 'In {"customer": {"email": "a@b.com"}}, email is...', a: 'Nested inside the customer object', w: ['A list', 'A number', 'Missing'], x: '{} = object, [] = list.' },
     { t: 'mc', q: 'Which is a JSON list?', a: '["vip", "lead", "ph"]', w: ['{"vip": true}', '"vip, lead"', 'vip=lead'], x: 'Square brackets = an array/list.' },
@@ -392,7 +392,7 @@ VAQ.addStage('c1', 'c1s15', { id: 'c1s16', name: "Builder's Toolkit", enemy: 'sl
     'Test with real samples, edge cases (empty fields, weird characters) and duplicates before going live.',
     'Add error alerts on every production automation. Silent failures cost clients money.',
     'Prevent duplicates with search-or-create / upsert and unique IDs.',
-    'Watch costs: tasks, operations, tokens. Filter early.',
+    'Watch costs: Zapier tasks, Make credits, AI tokens. Filter early.',
     'Hand over with a short doc or Loom: what it does, triggers, accounts used, how to turn it off.'
   ],
   qs: [
@@ -400,7 +400,7 @@ VAQ.addStage('c1', 'c1s15', { id: 'c1s16', name: "Builder's Toolkit", enemy: 'sl
     { t: 'mc', q: 'Which edge case should you test before launch?', a: 'An empty required field', w: ['Only perfect data', 'Nothing - just launch', 'Your own birthday'], x: 'Also duplicates, special characters, very long text.' },
     { t: 'mc', q: 'A client asks "how do I pause this if something goes wrong?" Your handover doc should...', a: 'Show exactly how to turn it off', w: ['Say "call me"', 'Hide the setting', 'Not mention it'], x: 'Clients feel safe when they control the off switch.' },
     { t: 'mc', q: 'Whose accounts should a client\'s automations run on?', a: 'The client\'s own accounts (you are invited as a user)', w: ['Your personal accounts', 'A shared free account', 'Random test accounts'], x: 'If you leave, their automations keep running.' },
-    { t: 'mc', q: 'Best way to estimate monthly cost of a Zap?', a: 'Runs per month x action steps per run', w: ['Number of apps', 'Length of the Zap name', 'Guess'], x: 'Same idea for Make operations: runs x modules.' },
+    { t: 'mc', q: 'Best way to estimate monthly cost of a Zap?', a: 'Runs per month x action steps per run', w: ['Number of apps', 'Length of the Zap name', 'Guess'], x: 'Same idea for Make credits: runs x modules. (Built-in steps like Filter and Formatter are free in Zapier.)' },
     { t: 'ord', q: 'Launch checklist order:', s: ['Build in test mode', 'Test happy path and edge cases', 'Add error alerts', 'Turn on / publish', 'Watch the first live runs'], x: 'Check history after the first live runs.' },
     { t: 'tf', q: 'Logging each run (e.g. to a sheet) makes debugging and client reporting easier.', a: true, x: 'Logs = proof of value and faster fixes.' }
   ]
@@ -419,7 +419,7 @@ VAQ.addStage('c1', 'c1s16', { id: 'c1s17', name: 'Real Client Builds', enemy: 'g
     { t: 'ord', q: 'Design an AI email triage flow:', s: ['Trigger: new email', 'AI classifies: billing, support, sales', 'Route by category', 'Draft a reply for review', 'Log to a sheet'], x: 'Trigger > decide > act > log.' },
     { t: 'ord', q: 'Design an invoice reminder flow:', s: ['Schedule: every morning', 'Find unpaid invoices past due', 'Send a polite reminder email', 'Tag the contact "reminded"', 'Alert the owner if 30+ days late'], x: 'Scheduled triggers are perfect for reminders.' },
     { t: 'mc', q: 'Where does AI add value in a lead-capture flow?', a: 'Scoring the lead or drafting a personal reply', w: ['Copying the email field', 'Adding a timestamp', 'Saving a row'], x: 'Moving data needs no AI.' },
-    { t: 'sort', q: 'Make or n8n is the better fit?', b: ['Make', 'n8n'], i: [['Client hates servers, wants managed SaaS', 0], ['Needs self-hosting for compliance', 1], ['Building multi-tool AI agents with memory', 1], ['Visual multi-branch scenario, pay per operation', 0]], x: 'Both are great; context decides.' },
+    { t: 'sort', q: 'Make or n8n is the better fit?', b: ['Make', 'n8n'], i: [['Client hates servers, wants managed SaaS', 0], ['Needs self-hosting for compliance', 1], ['Building multi-tool AI agents with memory', 1], ['Visual multi-branch scenario, pay per credit', 0]], x: 'Both are great; context decides.' },
     { t: 'tf', q: 'The most impressive solution is always the best one for the client.', a: false, x: 'Solve the problem simply and reliably. That is what clients pay for.' }
   ]
 });
