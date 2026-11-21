@@ -1,0 +1,12 @@
+{
+  "name": "va-quest-android",
+  "private": true,
+  "description": "Android wrapper for VA Quest. Built by .github/workflows/android.yml; loads the live game so updates arrive without a new APK.",
+  "dependencies": {
+    "@capacitor/android": "6.2.0",
+    "@capacitor/core": "6.2.0"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "6.2.0"
+  }
+}

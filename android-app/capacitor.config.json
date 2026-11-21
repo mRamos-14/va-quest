@@ -1,0 +1,12 @@
+{
+  "appId": "io.github.mramos14.vaquest",
+  "appName": "VA Quest",
+  "webDir": "www",
+  "server": {
+    "url": "https://mramos-14.github.io/va-quest/play/",
+    "androidScheme": "https"
+  },
+  "android": {
+    "backgroundColor": "#15122d"
+  }
+}

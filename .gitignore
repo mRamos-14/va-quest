@@ -3,3 +3,7 @@ __pycache__/
 *.pyc
 .DS_Store
 check.log
+android-app/node_modules/
+android-app/android/
+*.apk
+*.p12
