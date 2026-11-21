@@ -3,7 +3,7 @@
 // the connection returns. A newer build shows a banner with an Update button.
 // Bump both numbers with: python tools/bump_version.py "what changed"
 (function () {
-  const BUILD = 8;
+  const BUILD = 9;
   const APP_LINK = 'https://mramos-14.github.io/va-quest/play/';
   const EVERY = 5 * 60 * 1000;
   const ss = {
@@ -71,4 +71,15 @@
   window.addEventListener('online', () => check(false));
 
   window.VAQ.update = { state: U, check: () => check(true), apply, onChange: f => subs.push(f), link: APP_LINK };
+
+  // Install as an app (Chrome / Edge): a real install, not a badged home-screen shortcut
+  const I = { deferred: null, subs: [] };
+  const installed = () => !!window.Capacitor || matchMedia('(display-mode: standalone)').matches || navigator.standalone === true;
+  const iEmit = () => I.subs.forEach(f => { try { f(); } catch (e) { } });
+  window.addEventListener('beforeinstallprompt', e => { e.preventDefault(); I.deferred = e; iEmit(); });
+  window.addEventListener('appinstalled', () => { I.deferred = null; toastMsg('VA Quest installed. Open it from your home screen.'); iEmit(); });
+  window.VAQ.install = {
+    installed, available: () => !!I.deferred, onChange: f => I.subs.push(f),
+    async prompt() { if (!I.deferred) return; const d = I.deferred; I.deferred = null; d.prompt(); try { await d.userChoice; } catch (e) { } iEmit(); }
+  };
 })();

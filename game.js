@@ -780,6 +780,9 @@
         <div class="switch"><div><b>Chill mode</b><div class="small muted">Wrong answers don't cost hearts. You can't lose.</div></div><button id="s-chill">${S.set.chill ? 'On' : 'Off'}</button></div>
         <div class="switch"><div><b>Free roam</b><div class="small muted">Open every stage and boss in every world now</div></div><button id="s-free">${S.set.free ? 'On' : 'Off'}</button></div>
       </div>
+      <div class="card col" id="i-card" hidden><h3>Install as an app</h3>
+        <p class="small" id="i-line"></p>
+        <button id="i-go" class="primary" hidden>📲 Install VA Quest</button></div>
       <div class="card col"><h3>Updates</h3>
         <p class="small" id="u-line"></p>
         <button id="u-check">Check for updates</button></div>
@@ -790,6 +793,17 @@
         <button id="b-copy">Copy save code</button>
         <textarea id="b-in" rows="3" placeholder="Paste a save code here"></textarea><button id="b-load">Restore from code</button></div>
       <div class="card col"><h3>Start over</h3><button id="b-reset">Reset all progress</button><div id="b-confirm"></div></div>`;
+    const I = VAQ.install;
+    const iShow = () => {
+      const card = $('#i-card'); if (!card || !I) return;
+      const app = I.installed(), can = I.available();
+      card.hidden = false;
+      $('#i-go').hidden = app || !can;
+      $('#i-line').innerHTML = app ? "You're playing the installed app ✓"
+        : can ? 'Adds VA Quest to your phone as a real app: its own icon (no browser badge), no address bar, and it works offline.'
+        : "On Android in Chrome: tap <b>⋮ → Install app</b> (or <b>Add to Home screen → Install</b>). Don't pick <b>Create shortcut</b>, which makes the icon with the Chrome badge. On iPhone in Safari: <b>Share → Add to Home Screen</b>.";
+    };
+    if (I) { iShow(); I.onChange(iShow); $('#i-go').onclick = () => { sfx.tap(); I.prompt(); }; }
     const U = VAQ.update;
     const uLine = () => {
       const el = $('#u-line'); if (!el || !U) return;

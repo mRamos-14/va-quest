@@ -49,9 +49,18 @@
   </section>
 
   <section class="card" id="pwa">
-    <h2>📲 Install from the browser</h2>
-    <button class="btn" id="install" hidden>Install VA Quest</button>
-    <p class="small" id="pwa-android" style="margin:0">On Android in Chrome: open <b>⋮</b> → <b>Install app</b> or <b>Add to Home screen</b>.</p>
+    <h2>📲 Install from Chrome</h2>
+    <button class="btn primary" id="install" hidden>📲 Install VA Quest</button>
+    <p class="small muted" id="install-why" hidden style="margin:0">Installs it as a real app: its own icon with no browser badge, no address bar, and it shows in your app list. Use this <b>or</b> the APK, not both (each keeps its own save).</p>
+    <div class="small" id="pwa-android">
+      <p style="margin:0 0 4px">No Install button above? Use Chrome's menu instead:</p>
+      <ol>
+        <li>Open this page in <b>Chrome</b> (not inside Facebook, Messenger or Samsung Internet).</li>
+        <li>Tap <b>⋮</b> → <b>Install app</b>. If you only see <b>Add to Home screen</b>, tap it and pick <b>Install</b>.</li>
+        <li><b>Don't</b> pick <b>Create shortcut</b>. That makes the icon with the little Chrome badge.</li>
+      </ol>
+      <p class="muted" style="margin:4px 0 0">Already have a badged icon? Long-press it → <b>Remove</b>, then install again with the steps above. Copy your save code first (⚙ Settings in the game).</p>
+    </div>
     <p class="small" id="pwa-ios" style="margin:0">On iPhone or iPad: this page must be open in <b>Safari</b>. Tap <b>Share</b> → <b>Add to Home Screen</b> → <b>Add</b>. (iPhones can't install APK files.)</p>
     <p class="small muted" id="pwa-done" hidden style="margin:0">Installed. Open VA Quest from your home screen.</p>
   </section>
@@ -79,7 +88,11 @@
       else { document.getElementById('apk').hidden = true; document.getElementById('apk-info').hidden = true; document.getElementById('apk-wait').hidden = false; }
     }).catch(() => {});
     let deferred = null;
-    window.addEventListener('beforeinstallprompt', e => { e.preventDefault(); deferred = e; document.getElementById('install').hidden = false; });
+    window.addEventListener('beforeinstallprompt', e => {
+      e.preventDefault(); deferred = e;
+      document.getElementById('install').hidden = false; document.getElementById('install-why').hidden = false;
+      document.getElementById('pwa-android').querySelector('p').textContent = 'Or use Chrome\'s menu:';
+    });
     document.getElementById('install').onclick = async () => {
       if (!deferred) return; deferred.prompt(); const c = await deferred.userChoice; deferred = null;
       document.getElementById('install').hidden = true; if (c.outcome === 'accepted') document.getElementById('pwa-done').hidden = false;
