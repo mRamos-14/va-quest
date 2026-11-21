@@ -1,4 +1,4 @@
-"""Puts the VA Quest icon into the generated Android project (run in CI after `cap add android`).
+"""Puts the VA Quest icon and launch screen into the generated Android project (run in CI after `cap add android`).
     python tools/android_icons.py android-app/android
 """
 import os
@@ -23,4 +23,28 @@ for dpi, s in SIZES.items():
     out.save(os.path.join(d, 'ic_launcher_round.png'))
     fg = int(s * 108 / 48)
     square.resize((fg, fg), Image.LANCZOS).save(os.path.join(d, 'ic_launcher_foreground.png'))
-print('android icons written to', res)
+# launch screen: the game's dark background with the icon in the middle, instead of
+# Capacitor's default white screen and logo
+BG = (0x15, 0x12, 0x2d, 255)
+splashes = 0
+for root, _, files in os.walk(res):
+    for f in files:
+        if f == 'splash.png':
+            p = os.path.join(root, f)
+            w, h = Image.open(p).size
+            s = int(min(w, h) * 0.32)
+            out = Image.new('RGBA', (w, h), BG)
+            icon = rounded.resize((s, s), Image.LANCZOS)
+            out.paste(icon, ((w - s) // 2, (h - s) // 2), icon)
+            out.convert('RGB').save(p)
+            splashes += 1
+# Android 12+ draws its own launch screen from the theme: make its background dark too
+styles = os.path.join(res, 'values', 'styles.xml')
+if os.path.exists(styles):
+    xml = open(styles, encoding='utf-8').read()
+    if 'windowSplashScreenBackground' not in xml and 'AppTheme.NoActionBarLaunch' in xml:
+        start = xml.index('AppTheme.NoActionBarLaunch')
+        end = xml.index('</style>', start)
+        xml = xml[:end] + '    <item name="windowSplashScreenBackground">#15122d</item>\n    ' + xml[end:]
+        open(styles, 'w', encoding='utf-8').write(xml)
+print('android icons written to', res, '| launch screens replaced:', splashes)
